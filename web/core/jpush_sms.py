@@ -13,8 +13,6 @@ class Jpush(object):
             cls._instance = orig.__new__(cls, *args, **kw)
             cls._instance.app_key = yhk_app.config["APP_KEY"]
             cls._instance.master_secret = yhk_app.config["MASTER_SECRET"]
-            # cls._instance.app_key = "8635cab927cdb857d752eed5"
-            # cls._instance.master_secret = "c4db0bd0dceb7b5a9876596a"
             cls._instance.base64_auth_string = base64.b64encode(
                 f'{cls._instance.app_key}:{cls._instance.master_secret}'.encode("utf-8")).decode(
                 "utf-8")

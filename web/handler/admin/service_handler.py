@@ -39,6 +39,7 @@ async def get_service_list(request):
 async def view(request, service_id):
     with yhk_session() as session:
         service = await Service.get(session, service_id)
+        service.task_tpl_name = yhk_app.config["TASK_TEMPLATES"].get(service.task_template_code)
         return html(await render_template('/admin/service_view.html', request=request, data=service))
 
 
@@ -84,7 +85,7 @@ async def service_edit(request):
         task_tpl = request.form.get("task_tpl")
 
         if not (
-                                    service_name and sub_heading and price and enable and category_id and order_no and instruction and task_tpl):
+                                            service_name and sub_heading and price and enable and category_id and order_no and instruction and task_tpl):
             return json({"code": 500, "message": "请填写完整信息！"})
         if service_id:
             service_id = int(service_id)
