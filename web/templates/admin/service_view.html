@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}服务查看{% endblock %}
+{% block contents %}
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>服务-查看
+                    </h5>
+                    <div class="ibox-tools">
+                        <a class="st-backward">
+                            <i class="glyphicon glyphicon-arrow-left"></i>
+                        </a>
+                        <a class="st-refresh">
+                            <i class="glyphicon glyphicon-refresh"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">服务信息</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <h3>{{data.service_name}}</h3>
+                                    <p><label>副标题：</label> {{data.sub_heading}}</p>
+                                    <p><label>单价（元）：</label>￥{{data.price}}</p>
+                                    <p><label>是否可用：</label> {{'是' if data.enable else '否'}}</p>
+                                    <p><label>所属分类：</label> {{data.category.category_name}}</p>
+                                    <p><label>排序：</label> {{data.order_no}}</p>
+                                    <p><label>创建时间：</label> {{data.created_time.strftime('%Y-%m-%d %H:%M:%S')}}</p>
+                                    <p><label>备注：</label> {{data.remark}}</p>
+                                </div>
+                                <div class="col-sm-8 text-left">
+                                    <h3>服务说明：</h3>
+                                    {{data.instruction}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">套餐信息</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                {% for item in data.packages %}
+                                <div class="col-sm-4">
+                                    <div class="panel panel-default" style="padding: 10px;">
+                                        <h3>{{item.package_name}}</h3>
+                                        <p><label>价格：</label> ￥{{item.package_price}}</p>
+                                        <p><label>次数：</label> {{item.times}}</p>
+                                        <p><label>可重复购买：</label> {% if item.can_buy_again %}<span
+                                                class="glyphicon glyphicon-ok"></span>{% else %}<span
+                                                class="glyphicon glyphicon-remove">{% endif %}</span></p>
+                                        <p><label>是否标价：</label> {% if item.is_marked_price %}<span
+                                                class="glyphicon glyphicon-ok"></span>{% else %}<span
+                                                class="glyphicon glyphicon-remove">{% endif %}</span></p>
+                                        <p><label>是否可用：</label> {% if item.enable %}<span
+                                                class="glyphicon glyphicon-ok"></span>{% else %}<span
+                                                class="glyphicon glyphicon-remove">{% endif %}</span></p>
+                                        <p><label>套餐类型：</label> {{'免费' if item.package_type==1 else '付费'}}</p>
+                                        <p><label>备注：</label> {{item.remark}}</p>
+                                        <p><label>创建时间：</label> {{item.created_time.strftime('%Y-%m-%d %H:%M:%S')}}
+                                        </p>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block foot %}
+<script src="/static/js/admin/service.js"></script>
+{% endblock %}

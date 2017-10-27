@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}会员服务{% endblock %}
+{% block contents %}
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>会员账号 - {{actor.phone}}
+                    </h5>
+                    <div class="ibox-tools">
+                        <a class="st-backward">
+                            <i class="glyphicon glyphicon-arrow-left"></i>
+                        </a>
+                        <a class="st-refresh">
+                            <i class="glyphicon glyphicon-refresh"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>服务名称</th>
+                                <th>最近购买时间</th>
+                                <th>套餐余次</th>
+                                <th>服务状态</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in datalist %}
+                            <tr>
+                                <td>{{loop.index}}</td>
+                                <td>{{item.service.service_name}}</td>
+                                <td>{{item.last_buy_time.strftime('%Y-%m-%d %H:%M:%S')}}</td>
+                                <td>{{item.package_time}}</td>
+                                <td>
+                                    {% if item.service.enable and item.service.delete_flag==False %}
+                                    正常
+                                    {% else %}
+                                    不可用【被禁用或删除】
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block foot %}
+{% endblock %}

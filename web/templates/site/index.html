@@ -1,0 +1,100 @@
+{% from "macros/_headerhelpers.html" import header %}
+{% from "macros/_flashhelper.html" import flash_helper %}
+{% extends "base.html" %}
+{% block title %}首页{% endblock %}
+{% block contents %}
+{% block header %}
+{{ header('admin') }}
+{% endblock %}
+<div class="content form-group">
+    <div class="contentLeft">
+
+    </div>
+    <div class="contentRight widthMAX">
+        <div class="panel panel-primary" style="height: 50px">
+            <input style="margin-left: 10px" id="keyword" value="{% if keyword %}{{ keyword }}{% endif %}"
+                   placeholder="指定的关键词">
+            <input style="margin-left: 10px" id="num" value="{% if num %}{{ num }}{% endif %}"
+                   placeholder="检测行数(前n名)">
+            <button class="btn btn-info btn-uppercase btn-bigger" id="btn_query">查询</button>
+        </div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">查询结果</div>
+            <div>
+                <table id="tablelist"></table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block footer %}
+{{ flash_helper(request) }}
+<script type="text/javascript">
+    $(function () {
+        $('#tablelist').bootstrapTable({
+            height: 600,
+            columns: [{
+                field: 'rank',
+                title: '排名'
+            }, {
+                field: 'keyword',
+                title: '关键词'
+            }, {
+                field: 'site_url',
+                title: '网站地址'
+            }, {
+                field: 'page_url',
+                title: '页面地址',
+                formatter: function (value, row, index) {
+                    var div = "<div style='width:200px;overflow-x: auto;'>" + value + "</div>";
+                    return div;
+                }
+            }, {
+                field: 'page_title',
+                title: '页面标题'
+            }, {
+                field: 'top100',
+                title: 'top100'
+            }, {
+                field: 'site_weight',
+                title: '权重'
+            }]
+        });
+    });
+
+    $("#btn_query").click(function () {
+        var keyword = $("#keyword").val();
+        if (keyword == '') {
+            modal2("请输入关键词！");
+            return;
+        }
+        get_baidu_kwywordrank_pc(83317);
+        return;
+        var num = $("#num").val();
+        $.post("/baidu/keywordrank/pc/q", {"keyword": keyword, "num": num}, function (data) {
+            if (data.code == 200) {
+                var taskid = data.data.taskid;
+                get_baidu_kwywordrank_pc(taskid);
+            } else {
+                modal2(data.code + ":" + data.message);
+            }
+        }, "json");
+    });
+
+    function get_baidu_kwywordrank_pc(taskid) {
+        $.post("/baidu/keywordrank/pc/r", {"taskid": taskid}, function (result) {
+            if (result.code == 200) {
+                if (result.data && result.data.length > 0) {
+                    $('#tablelist').bootstrapTable('load', result.data);
+                } else {
+                    setTimeout(function () {
+                        get_baidu_kwywordrank_pc(taskid);
+                    }, 2000);
+                }
+            } else {
+                modal2(result.code + ":" + result.message);
+            }
+        }, "json");
+    }
+</script>
+{% endblock %}

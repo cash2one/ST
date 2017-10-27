@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %} 提示{% endblock %}
+{% block head %}{% endblock %}
+{% block contents %}
+<body class="gray-bg">
+<div class="page-header" style="padding: 20px;">
+    <h1> 提示！ </h1>
+    <p class="lead">{% if message %}{{ message }}{% endif %}</p>
+</div>
+{% endblock %}
+{% block footer %}
+{% endblock %}

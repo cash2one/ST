@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}订单管理{% endblock %}
+{% block contents %}
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>订单管理
+                    </h5>
+                    <div class="ibox-tools">
+                        <a class="st-refresh">
+                            <i class="glyphicon glyphicon-refresh"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div style="margin-bottom: 10px;">
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="username" placeholder="手机号">
+                            </div>
+                            <button id="btn_search" type="button" class="btn btn-primary">搜索</button>
+                        </form>
+                    </div>
+                    <table id="tablelist"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="order_check" style="display: none;">
+    <div class="row" style="margin-top: 10px;">
+        <div class="col-sm-10 col-sm-offset-1">
+            <form class="form-horizontal"  id="order_check_form">
+                <div class="form-group">
+                    <label for="payment_type" class="col-sm-4 control-label">支付方式</label>
+                    <div class="col-sm-6">
+                        <select class="form-control" id="payment_type">
+                            <option value="1">微信</option>
+                            <option value="2">支付宝</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="payment_price" class="col-sm-4 control-label">支付金额</label>
+                    <div class="col-sm-6">
+                        <div class="input-group">
+                            <div class="input-group-addon">￥</div>
+                            <input type="text" class="form-control" id="payment_price" placeholder="支付金额">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="payment_time" class="col-sm-4 control-label">支付时间</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" id="payment_time" placeholder="支付时间">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-4 col-sm-6">
+                        <button type="button" id="btn_order_check" class="btn btn-primary btn-w-m">提交</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block foot %}
+<script src="/static/js/admin/order.js"></script>
+{% endblock %}

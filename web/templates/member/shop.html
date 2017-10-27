@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}商城{% endblock %}
+{% block contents %}
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>在售服务
+                    </h5>
+                    <div class="ibox-tools">
+                        <a class="st-refresh">
+                            <i class="glyphicon glyphicon-refresh"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="ibox-content" style="padding: 15px;">
+                    <div class="row">
+                        <div class="col-sm-12 animated fadeInRight">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    {% for item in datalist %}
+                                    <div class="file-box" style="width:400px;">
+                                        <div class="file">
+                                            <span class="corner"></span>
+                                            <div class="row">
+                                                <div class="col-sm-4 icon">
+                                                    <i class="fa fa-file"></i>
+                                                </div>
+                                                <div class="col-sm-8" style="padding: 25px 0px;">
+                                                    <h3>{{item.service_name}}</h3>
+                                                    <small>{{item.sub_heading}}</small>
+                                                </div>
+                                            </div>
+                                            <div class="file-name">
+                                                <div class="row">
+                                                    <div class="col-sm-7">
+                                                        {% if item.package %}
+                                                        <h3>
+                                                            套餐：￥{{item.package.package_price}}/{{item.package.times}}次</h3>
+                                                        <small>{{item.package.remark}}</small>
+                                                        {% else %}
+                                                        <h3>价格：￥{{item.price}}/次</h3>
+                                                        <small>查询一个关键词，记一次调用</small>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="col-sm-5" style="padding-top:10px;">
+                                                        <a class="btn btn-w-m btn-primary"
+                                                           href="/member/shop/service/{{item.id}}" role="button">详情</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block foot %}
+{% endblock %}

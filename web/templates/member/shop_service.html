@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block title %}服务详情{% endblock %}
+{% block contents %}
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>服务详情
+                    </h5>
+                    <div class="ibox-tools">
+                        <a class="st-backward">
+                            <i class="glyphicon glyphicon-arrow-left"></i>
+                        </a>
+                        &nbsp;&nbsp;
+                        <a class="st-refresh">
+                            <i class="glyphicon glyphicon-refresh"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="ibox-content" style="padding: 15px;">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="col-sm-4">
+                                <i class="glyphicon glyphicon-file pull-right"
+                                   style="font-size: 100px;color: #dadada;"></i>
+                            </div>
+                            <div class="col-sm-8">
+                                <h3>{{item.service_name}}</h3>
+                                <small>{{item.sub_heading}}</small>
+                                <br><br>
+                                <button id="btn_buynow" type="button" class="btn btn-w-m  btn-primary">立即购买</button>
+                            </div>
+                            <input type="hidden" value="{{item.id}}" id="hidden_service_id"/>
+                        </div>
+                        <div class="col-sm-6" style="border-left: solid 1px #dadada;">
+                            <div style="padding-left: 50px;">
+                                <br>
+                                <h3>
+                                    {{item.price}}/次&nbsp;&nbsp;{% if item.package
+                                    %}套餐：￥{{item.package.package_price}}/{{item.package.times}}次 {% endif %}</h3>
+                                {% if item.package%}
+                                <small>{{item.package.remark}}</small>
+                                {% endif %}
+                                <br>
+                                <br>
+                                <br>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <h3>服务介绍：</h3>
+                    {{item.instruction}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="packages" style="display: none;">
+        <table class="table table-hover" id="table_package">
+            {% for pk in packages %}
+            <tr onclick="check_package(this);" pid="{{pk.id}}" price="{{pk.package_price}}">
+                <td class="project-status"><span class="label label-primary">{{loop.index}}</span></td>
+                <td class="project-title">
+                    {{pk.package_name}}
+                    <br>
+                    <small>可调用次数{{pk.times}}次</small>
+                </td>
+                <td class="project-completion">
+                    <small>￥{{pk.package_price}}</small>
+                </td>
+                <td>
+
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-5" style="padding-top: 5px;"><h3>合计：￥<span>0.00</span></h3></div>
+            <div class="col-sm-5">
+                <button id="btn_to_buy" type="button" class="btn btn-w-m  btn-primary" onclick="buy_now();">立即购买
+                </button>
+            </div>
+        </div>
+    </div>
+    <div id="package_pay" style="display: none;">
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-4">
+                <img style="margin-top: 60px;" width="220px" height="300px" alt="image"
+                     src="/static/img/wechat_pay.png"></a>
+            </div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-4"><img width="220px" height="330px" alt="image"
+                                       src="/static/img/alipay.jpg">
+            </div>
+            <div class="col-sm-1"></div>
+        </div>
+        <div class="row">
+            <div class="col-sm-11 col-sm-offset-1">
+                <h3>套餐信息:</h3>
+                <span style="margin-left: 25px;" id="package_pay_service_name"></span>&nbsp;&nbsp;
+                <span id="package_pay_package_name"></span>&nbsp;&nbsp;
+                <span id="package_pay_price"></span>
+                <h3>支付说明:</h3>
+                <ol>
+                    <li>支付成功后，服务可调用次数的增加会有一定的延迟。</li>
+                    <li>若长时间未收到服务次数，请联系客服人员，并提供购买的
+                        <mark>服务名称</mark>
+                        、
+                        <mark>支付金额</mark>
+                        以及
+                        <mark>账户手机号</mark>
+                        等信息。
+                    </li>
+                    <li>支付时请确认
+                        <mark>收款人信息：姜宽（*宽）</mark>
+                        。
+                    </li>
+                    <li style="color:red;"><u>为确保您的支付安全，请务必联系客服人员,微信号：jkbeibei1107。</u></li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block foot %}
+<script src="/static/js/member/shop.js?v=0.0.1"></script>
+{% endblock %}

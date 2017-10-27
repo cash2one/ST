@@ -1,0 +1,39 @@
+{% extends "base_site.html" %}
+{% block title %}登录{% endblock %}
+{% block contents %}
+<body class="gray-bg">
+
+<div class="middle-box text-center loginscreen  animated fadeInDown">
+    <div>
+        <div>
+            <h1 class="logo-name">ST</h1>
+        </div>
+        <h3>欢迎使用 ST</h3>
+
+        <form id="login_form" class="m-t" role="form">
+            <div class="form-group">
+                <input id="username" name="username" type="text" class="form-control" placeholder="用户名">
+            </div>
+            <div class="form-group">
+                <input id="password" name="password" type="password" class="form-control" placeholder="密码">
+            </div>
+            <div class="form-group form-inline" style="text-align: left">
+                <input id="valid_code" name="valid_code" type="text" class="form-control"
+                       style="width:63%;margin-right:15px;" placeholder="验证码">
+                <img id="img_valid" style="cursor: pointer">
+            </div>
+            <button type="submit" class="btn btn-primary block full-width m-b">登 录</button>
+
+            <p class="text-muted text-center"><a href="/member/forget">
+                <small>忘记密码了？</small>
+            </a> | <a href="/member/register">注册一个新账号</a>
+            </p>
+
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block foot %}
+<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+<script src="/static/js/member/login.js"></script>
+{% endblock %}
