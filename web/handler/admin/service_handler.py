@@ -5,6 +5,7 @@ from yhklibs.db.postgresql import yhk_session
 from web.auth import admin_login_required
 from web.models.service import Service, Package
 from web.models.category import Category
+from yhklibs import yhk_app
 
 
 @st_admin_blueprint.route("/service", methods=["GET"])
@@ -58,18 +59,18 @@ async def delete_service(request, service_id):
 async def service_edit(request):
     if request.method == "GET":
         service_id = request.args.get("service_id")
-
+        task_tpls = yhk_app.config["TASK_TEMPLATES"]
         with yhk_session() as session:
             categories = await Category.get_all(session)
 
             if not service_id:
                 return html(await render_template('/admin/service_edit.html', request=request, data=None,
-                                                  categories=categories))
+                                                  categories=categories, task_tpls=task_tpls))
             else:
                 service = await Service.get(session, service_id)
                 service.packages = list(filter(lambda p: p.delete_flag is False, service.packages))
                 return html(await render_template('/admin/service_edit.html', request=request, data=service,
-                                                  categories=categories))
+                                                  categories=categories, task_tpls=task_tpls))
     elif request.method == "POST":
         service_id = request.form.get("service_id")
         service_name = request.form.get("service_name")
@@ -80,8 +81,10 @@ async def service_edit(request):
         order_no = request.form.get("order_no")
         remark = request.form.get("remark")
         instruction = request.form.get("instruction")
+        task_tpl = request.form.get("task_tpl")
 
-        if not (service_name and sub_heading and price and enable and category_id and order_no and instruction):
+        if not (
+                                    service_name and sub_heading and price and enable and category_id and order_no and instruction and task_tpl):
             return json({"code": 500, "message": "请填写完整信息！"})
         if service_id:
             service_id = int(service_id)
@@ -105,6 +108,7 @@ async def service_edit(request):
             service.order_no = order_no
             service.remark = remark
             service.instruction = instruction
+            service.task_template_code = task_tpl
             session.commit()
             return json({"code": 200, "message": "保存成功！", "service_id": service.id})
 

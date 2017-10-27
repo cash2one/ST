@@ -1,215 +1,231 @@
 {% extends "base.html" %}
 {% block title %}服务编辑{% endblock %}
 {% block contents %}
-<body class="gray-bg">
-<div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>服务编辑
-                    </h5>
-                    <div class="ibox-tools">
-                        <a class="st-backward">
-                            <i class="glyphicon glyphicon-arrow-left"></i>
-                        </a>
-                        <a class="st-refresh">
-                            <i class="glyphicon glyphicon-refresh"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="ibox-content">
-                    <input type="hidden" id="service_id" value="{{data.id if data else ""}}">
-                    <div class="panel panel-primary" id="pl_service_info">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">服务信息</h3>
-                        </div>
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <form class="form-horizontal">
-                                        <div class="form-group">
-                                            <label for="service_name" class="col-sm-3 control-label"><i
-                                                    class="text-danger">*</i>服务名称：</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control" id="service_name"
-                                                       value="{{data.service_name}}"/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="service_name" class="col-sm-3 control-label"><i
-                                                    class="text-danger">*</i>副标题：</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control" id="sub_heading"
-                                                       value="{{data.sub_heading}}"/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="service_name" class="col-sm-3 control-label"><i
-                                                    class="text-danger">*</i>单价（元）：</label>
-                                            <div class="col-sm-9">
-                                                <input type="number" class="form-control" id="price"
-                                                       value="{{data.price}}"/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="service_name" class="col-sm-3 control-label">是否可用：</label>
-                                            <div class="col-sm-9">
-                                                <label>
-                                                    <input type="checkbox" id="enable" {{"checked" if
-                                                    data.enable else
-                                                    ""}}/>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="service_name" class="col-sm-3 control-label">所属分类：</label>
-                                            <div class="col-sm-9">
-                                                <select class="form-control" id="category">
-                                                    {% for c in categories %}
-                                                    <option value="{{c.id}}" {{
-                                                    "selected" if data.category_id==c.id else
-                                                    ""}}>{{c.category_name}}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="service_name" class="col-sm-3 control-label"><i
-                                                    class="text-danger">*</i>排序：</label>
-                                            <div class="col-sm-9">
-                                                <input type="number" class="form-control" id="order_no"
-                                                       value="{{data.order_no}}"/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="service_name" class="col-sm-3 control-label">备注：</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control" id="remark"
-                                                       value="{{data.remark}}"/>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="col-sm-8 text-left">
-                                    <div class="form-group">
-                                        <label for="instruction"><i class="text-danger">*</i>服务说明：</label>
-                                        <textarea class="form-control" rows="14"
-                                                  id="instruction">{{data.instruction}}</textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-9 col-sm-offset-1">
-                                    <input class="btn btn-primary btn-w-m" type="button" value="保存" id="btn_edit_save">
-                                </div>
-                            </div>
+    <body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>服务编辑
+                        </h5>
+                        <div class="ibox-tools">
+                            <a class="st-backward">
+                                <i class="glyphicon glyphicon-arrow-left"></i>
+                            </a>
+                            <a class="st-refresh">
+                                <i class="glyphicon glyphicon-refresh"></i>
+                            </a>
                         </div>
                     </div>
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">套餐信息</h3>
-                        </div>
-                        <div class="panel-body">
-                            <div class="row">
-                                {% for item in data.packages %}
-                                <div class="col-sm-4">
-                                    <div class="panel panel-default" style="padding: 10px;">
+                    <div class="ibox-content">
+                        <input type="hidden" id="service_id" value="{{ data.id if data else "" }}">
+                        <div class="panel panel-primary" id="pl_service_info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">服务信息</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-sm-4">
                                         <form class="form-horizontal">
-                                            <input type="hidden" value="{{item.id}}" name="package_id"/>
                                             <div class="form-group">
-                                                <label class="col-sm-3 control-label"><i
-                                                        class="text-danger">*</i>套餐名称：</label>
+                                                <label for="service_name" class="col-sm-3 control-label"><i
+                                                        class="text-danger">*</i>服务名称：</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control" name="package_name"
-                                                           value="{{item.package_name}}"/>
+                                                    <input type="text" class="form-control" id="service_name"
+                                                           value="{{ data.service_name }}"/>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="col-sm-3 control-label"><i
-                                                        class="text-danger">*</i>价格：</label>
+                                                <label for="service_name" class="col-sm-3 control-label"><i
+                                                        class="text-danger">*</i>副标题：</label>
                                                 <div class="col-sm-9">
-                                                    <input type="number" class="form-control" name="package_price"
-                                                           value="{{item.package_price}}"/>
+                                                    <input type="text" class="form-control" id="sub_heading"
+                                                           value="{{ data.sub_heading }}"/>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="col-sm-3 control-label"><i
-                                                        class="text-danger">*</i>次数：</label>
+                                                <label for="service_name" class="col-sm-3 control-label"><i
+                                                        class="text-danger">*</i>单价（元）：</label>
                                                 <div class="col-sm-9">
-                                                    <input type="number" class="form-control" name="times"
-                                                           value="{{item.times}}"/>
+                                                    <input type="number" class="form-control" id="price"
+                                                           value="{{ data.price }}"/>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="col-sm-3 control-label">可重复购买：</label>
-                                                <div class="col-sm-9">
-                                                    <input type="checkbox" value="1" name="can_buy_again" {{"checked" if
-                                                    item.can_buy_again else ""}}/>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label
-                                                        class="col-sm-3 control-label">是否标价：</label>
-                                                <div class="col-sm-9">
-                                                    <input type="checkbox" name="is_marked_price" {{"checked" if
-                                                    item.is_marked_price else ""}}/>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="enable" class="col-sm-3 control-label">是否可用：</label>
-                                                <div class="col-sm-9">
-                                                    <input type="checkbox" name="enable" {{"checked" if
-                                                    item.enable else ""}}/>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="col-sm-3 control-label">套餐类型：</label>
+                                                <label for="service_name" class="col-sm-3 control-label">是否可用：</label>
                                                 <div class="col-sm-9">
                                                     <label>
-                                                        <input type="radio" name="package_type"
-                                                               value="1" {{"checked" if item.package_type==1 else
-                                                        ""}}>免费
-                                                    </label>
-                                                    <label>
-                                                        <input type="radio" name="package_type"
-                                                               value="2" {{"checked" if item.package_type==2 else
-                                                        ""}}>收费
+                                                        <input type="checkbox" id="enable" {{ "checked" if
+                                                    data.enable else
+                                                    "" }}/>
                                                     </label>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="col-sm-3 control-label"><i
+                                                <label for="service_name" class="col-sm-3 control-label">所属分类：</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" id="category">
+                                                        <option value="">--请选择--</option>
+                                                        {% for c in categories %}
+                                                            <option value="{{ c.id }}" {{ "selected" if data.category_id==c.id else
+                                                    "" }}>{{ c.category_name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="service_name" class="col-sm-3 control-label"><i
                                                         class="text-danger">*</i>排序：</label>
                                                 <div class="col-sm-9">
-                                                    <input type="number" class="form-control" name="order_no"
-                                                           value="{{item.order_no}}"/>
+                                                    <input type="number" class="form-control" id="order_no"
+                                                           value="{{ data.order_no }}"/>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="col-sm-3 control-label">备注：</label>
+                                                <label for="service_name" class="col-sm-3 control-label">备注：</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control" name="remark"
-                                                           value="{{item.remark}}"/>
+                                                    <input type="text" class="form-control" id="remark"
+                                                           value="{{ data.remark }}"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="service_name" class="col-sm-3 control-label"><i
+                                                        class="text-danger">*</i>任务模板：</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" id="task_tpl">
+                                                        <option value="">--请选择--</option>
+                                                        {% for key in task_tpls %}
+                                                            <option value="{{ key }}" {{ "selected" if data.task_template_code==key else
+                                                    "" }}>{{ task_tpls[key] }}</option>
+                                                        {% endfor %}
+                                                    </select>
                                                 </div>
                                             </div>
                                         </form>
-                                        <div class="row">
-                                            <div class="col-sm-1 col-sm-offset-2">
-                                                <input class="btn btn-primary btn-w-m" type="button" value="删除"
-                                                       onclick="delete_package('{{item.id}}',this)">
-                                            </div>
-                                            <div class="col-sm-1 col-sm-offset-3">
-                                                <input class="btn btn-primary btn-w-m" type="button" value="保存"
-                                                       onclick="save_package(this);">
-                                            </div>
+                                    </div>
+                                    <div class="col-sm-8 text-left">
+                                        <div class="form-group">
+                                            <label for="instruction"><i class="text-danger">*</i>服务说明：</label>
+                                            <textarea class="form-control" rows="14"
+                                                      id="instruction">{{ data.instruction }}</textarea>
                                         </div>
                                     </div>
                                 </div>
-                                {% endfor %}
-                                <div class="col-sm-4">
-                                    <button class="btn btn-warning" onclick="add_package_tpl(this);">点我添加</button>
+                                <div class="row">
+                                    <div class="col-sm-9 col-sm-offset-1">
+                                        <input class="btn btn-primary btn-w-m" type="button" value="保存"
+                                               id="btn_edit_save">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">套餐信息</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    {% for item in data.packages %}
+                                        <div class="col-sm-4">
+                                            <div class="panel panel-default" style="padding: 10px;">
+                                                <form class="form-horizontal">
+                                                    <input type="hidden" value="{{ item.id }}" name="package_id"/>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label"><i
+                                                                class="text-danger">*</i>套餐名称：</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" class="form-control" name="package_name"
+                                                                   value="{{ item.package_name }}"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label"><i
+                                                                class="text-danger">*</i>价格：</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="number" class="form-control"
+                                                                   name="package_price"
+                                                                   value="{{ item.package_price }}"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label"><i
+                                                                class="text-danger">*</i>次数：</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="number" class="form-control" name="times"
+                                                                   value="{{ item.times }}"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">可重复购买：</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="checkbox" value="1" name="can_buy_again" {{ "checked" if
+                                                    item.can_buy_again else "" }}/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label
+                                                                class="col-sm-3 control-label">是否标价：</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="checkbox" name="is_marked_price" {{ "checked" if
+                                                    item.is_marked_price else "" }}/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="enable" class="col-sm-3 control-label">是否可用：</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="checkbox" name="enable" {{ "checked" if
+                                                    item.enable else "" }}/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">套餐类型：</label>
+                                                        <div class="col-sm-9">
+                                                            <label>
+                                                                <input type="radio" name="package_type"
+                                                                       value="1" {{ "checked" if item.package_type==1 else
+                                                        "" }}>免费
+                                                            </label>
+                                                            <label>
+                                                                <input type="radio" name="package_type"
+                                                                       value="2" {{ "checked" if item.package_type==2 else
+                                                        "" }}>收费
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label"><i
+                                                                class="text-danger">*</i>排序：</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="number" class="form-control" name="order_no"
+                                                                   value="{{ item.order_no }}"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">备注：</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" class="form-control" name="remark"
+                                                                   value="{{ item.remark }}"/>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <div class="row">
+                                                    <div class="col-sm-1 col-sm-offset-2">
+                                                        <input class="btn btn-primary btn-w-m" type="button" value="删除"
+                                                               onclick="delete_package('{{ item.id }}',this)">
+                                                    </div>
+                                                    <div class="col-sm-1 col-sm-offset-3">
+                                                        <input class="btn btn-primary btn-w-m" type="button" value="保存"
+                                                               onclick="save_package(this);">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                    <div class="col-sm-4">
+                                        <button class="btn btn-warning" onclick="add_package_tpl(this);">点我添加</button>
 
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -218,93 +234,92 @@
             </div>
         </div>
     </div>
-</div>
-<div id="package_add_tpl" style="display: none;">
-    <div class="col-sm-4">
-        <div class="panel panel-default" style="padding: 10px;">
-            <form class="form-horizontal">
-                <input type="hidden" name="package_id"/>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label"><i
-                            class="text-danger">*</i>套餐名称：</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control" name="package_name"/>
+    <div id="package_add_tpl" style="display: none;">
+        <div class="col-sm-4">
+            <div class="panel panel-default" style="padding: 10px;">
+                <form class="form-horizontal">
+                    <input type="hidden" name="package_id"/>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label"><i
+                                class="text-danger">*</i>套餐名称：</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="package_name"/>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label"><i
-                            class="text-danger">*</i>价格：</label>
-                    <div class="col-sm-9">
-                        <input type="number" class="form-control" name="package_price"
-                        />
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label"><i
+                                class="text-danger">*</i>价格：</label>
+                        <div class="col-sm-9">
+                            <input type="number" class="form-control" name="package_price"
+                            />
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label"><i
-                            class="text-danger">*</i>次数：</label>
-                    <div class="col-sm-9">
-                        <input type="number" class="form-control" name="times"
-                        />
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label"><i
+                                class="text-danger">*</i>次数：</label>
+                        <div class="col-sm-9">
+                            <input type="number" class="form-control" name="times"
+                            />
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">可重复购买：</label>
-                    <div class="col-sm-9">
-                        <input type="checkbox" value="1" name="can_buy_again"/>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">可重复购买：</label>
+                        <div class="col-sm-9">
+                            <input type="checkbox" value="1" name="can_buy_again"/>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label
-                            class="col-sm-3 control-label">是否标价：</label>
-                    <div class="col-sm-9">
-                        <input type="checkbox" name="is_marked_price">
+                    <div class="form-group">
+                        <label
+                                class="col-sm-3 control-label">是否标价：</label>
+                        <div class="col-sm-9">
+                            <input type="checkbox" name="is_marked_price">
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="enable" class="col-sm-3 control-label">是否可用：</label>
-                    <div class="col-sm-9">
-                        <input type="checkbox" name="enable"/>
+                    <div class="form-group">
+                        <label for="enable" class="col-sm-3 control-label">是否可用：</label>
+                        <div class="col-sm-9">
+                            <input type="checkbox" name="enable"/>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">套餐类型：</label>
-                    <div class="col-sm-9">
-                        <label>
-                            <input type="radio" name="package_type" value="1">免费
-                        </label>
-                        <label>
-                            <input type="radio" name="package_type" value="2" checked>收费
-                        </label>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">套餐类型：</label>
+                        <div class="col-sm-9">
+                            <label>
+                                <input type="radio" name="package_type" value="1">免费
+                            </label>
+                            <label>
+                                <input type="radio" name="package_type" value="2" checked>收费
+                            </label>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label"><i
-                            class="text-danger">*</i>排序：</label>
-                    <div class="col-sm-9">
-                        <input type="number" class="form-control" name="order_no"/>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label"><i
+                                class="text-danger">*</i>排序：</label>
+                        <div class="col-sm-9">
+                            <input type="number" class="form-control" name="order_no"/>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">备注：</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control" name="remark"/>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">备注：</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="remark"/>
+                        </div>
                     </div>
-                </div>
-            </form>
-            <div class="row">
-                <div class="col-sm-1 col-sm-offset-2">
-                    <input class="btn btn-primary btn-w-m" type="button" value="删除"
-                           onclick="delete_package(this)">
-                </div>
-                <div class="col-sm-1 col-sm-offset-3">
-                    <input class="btn btn-primary btn-w-m" type="button" value="保存"
-                           onclick="save_package(this);">
+                </form>
+                <div class="row">
+                    <div class="col-sm-1 col-sm-offset-2">
+                        <input class="btn btn-primary btn-w-m" type="button" value="删除"
+                               onclick="delete_package(this)">
+                    </div>
+                    <div class="col-sm-1 col-sm-offset-3">
+                        <input class="btn btn-primary btn-w-m" type="button" value="保存"
+                               onclick="save_package(this);">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}
 {% block foot %}
-<script src="/static/js/admin/service.js"></script>
+    <script src="/static/js/admin/service.js"></script>
 {% endblock %}

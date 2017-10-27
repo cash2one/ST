@@ -34,3 +34,7 @@ SESSION = {
 
 APP_KEY = "8635cab927cdb857d752eed5"
 MASTER_SECRET = "c4db0bd0dceb7b5a9876596a"
+
+TASK_TEMPLATES = {
+    "BaiduPcTop50": "百度-PC-前50网站信息"
+}
