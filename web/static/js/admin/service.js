@@ -89,7 +89,7 @@ $(function () {
         var order_no = $("#pl_service_info #order_no").val();
         var remark = $("#pl_service_info #remark").val();
         var instruction = $("#pl_service_info #instruction").val();
-        var task_tpl = $("#pl_service_info #task_tpl").val();
+        var service_type = $("#pl_service_info #service_type").val();
         var content = {
             service_id: service_id,
             service_name: service_name,
@@ -100,7 +100,7 @@ $(function () {
             order_no: order_no,
             remark: remark,
             instruction: instruction,
-            task_tpl: task_tpl
+            service_type: service_type
         }
 
         $.post("/admin/service/edit", content, function (data) {

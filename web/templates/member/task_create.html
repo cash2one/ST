@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}新建任务{% endblock %}
+{% block contents %}
+    <body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>新建任务
+                        </h5>
+                        <div class="ibox-tools">
+                            <a class="st-backward">
+                                <i class="glyphicon glyphicon-arrow-left"></i>
+                            </a>
+                            <a class="st-refresh">
+                                <i class="glyphicon glyphicon-refresh"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label for="task_name" class="col-sm-2 control-label"><i class="text-danger">*</i>任务名称:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="task_name">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="task_type" class="col-sm-2 control-label"><i
+                                        class="text-danger">*</i>任务类型:</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" id="task_type">
+                                        <option value="">--请选择--</option>
+                                        {% for s in services %}
+                                            <option value="{{ s.service.service_type }}">{{ s.service_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                        <form class="form-horizontal task-condition" id="form_condition_10000" style="display: none;">
+                            <div class="form-group">
+                                <label for="keywords_10000" class="col-sm-2 control-label"><i
+                                        class="text-danger">*</i>关键词:</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" id="keywords_10000" rows="10" placeholder="一行一个关键词，一个关键词计一次调用"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="task_count_10000" class="col-sm-2 control-label">查询条数:</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control" id="task_count_10000" placeholder="默认前50条">
+                                </div>
+                            </div>
+                        </form>
+                        <form class="form-horizontal" action="#">
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="button" id="btn_task_create" class="btn btn-primary btn-w-m">提交</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block foot %}
+    <script src="/static/js/member/task.js"></script>
+{% endblock %}

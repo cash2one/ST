@@ -39,7 +39,7 @@ async def get_service_list(request):
 async def view(request, service_id):
     with yhk_session() as session:
         service = await Service.get(session, service_id)
-        service.task_tpl_name = yhk_app.config["TASK_TEMPLATES"].get(service.task_template_code)
+        service.service_type = yhk_app.config["SERVICE_TYPE_DICT"].get(service.service_type)
         return html(await render_template('/admin/service_view.html', request=request, data=service))
 
 
@@ -60,18 +60,18 @@ async def delete_service(request, service_id):
 async def service_edit(request):
     if request.method == "GET":
         service_id = request.args.get("service_id")
-        task_tpls = yhk_app.config["TASK_TEMPLATES"]
+        service_types = yhk_app.config["SERVICE_TYPE_DICT"]
         with yhk_session() as session:
             categories = await Category.get_all(session)
 
             if not service_id:
                 return html(await render_template('/admin/service_edit.html', request=request, data=None,
-                                                  categories=categories, task_tpls=task_tpls))
+                                                  categories=categories, service_types=service_types))
             else:
                 service = await Service.get(session, service_id)
                 service.packages = list(filter(lambda p: p.delete_flag is False, service.packages))
                 return html(await render_template('/admin/service_edit.html', request=request, data=service,
-                                                  categories=categories, task_tpls=task_tpls))
+                                                  categories=categories, service_types=service_types))
     elif request.method == "POST":
         service_id = request.form.get("service_id")
         service_name = request.form.get("service_name")
@@ -82,10 +82,10 @@ async def service_edit(request):
         order_no = request.form.get("order_no")
         remark = request.form.get("remark")
         instruction = request.form.get("instruction")
-        task_tpl = request.form.get("task_tpl")
+        service_type = request.form.get("service_type")
 
-        if not (
-                                            service_name and sub_heading and price and enable and category_id and order_no and instruction and task_tpl):
+        if not (service_name and sub_heading and price and enable and category_id and order_no and instruction
+                and service_type):
             return json({"code": 500, "message": "请填写完整信息！"})
         if service_id:
             service_id = int(service_id)
@@ -109,7 +109,7 @@ async def service_edit(request):
             service.order_no = order_no
             service.remark = remark
             service.instruction = instruction
-            service.task_template_code = task_tpl
+            service.service_type = service_type
             session.commit()
             return json({"code": 200, "message": "保存成功！", "service_id": service.id})
 

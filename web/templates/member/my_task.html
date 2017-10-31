@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}任务管理{% endblock %}
+{% block contents %}
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>任务管理
+                    </h5>
+                    <div class="ibox-tools">
+                        <a class="st-refresh">
+                            <i class="glyphicon glyphicon-refresh"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div style="margin-bottom: 10px;">
+                        <div class="row">
+                            <div class="col-sm-10">
+                                <form class="form-inline">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="task_name" placeholder="任务名称">
+                                    </div>
+                                    <button id="btn_search" type="button" class="btn btn-primary">搜索</button>
+                                </form>
+                            </div>
+                            <div class="col-sm-2 text-right">
+                                <a class="btn btn-primary" role="button" href="/member/task/create">新建</a>
+                            </div>
+                        </div>
+
+                    </div>
+                    <table id="tablelist"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block foot %}
+<script src="/static/js/member/task.js"></script>
+{% endblock %}

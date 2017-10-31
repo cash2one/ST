@@ -23,3 +23,13 @@ PAYMENT_TYPE_MAP = {
     1: "微信",
     2: "支付宝"
 }
+
+TASK_STATUS_INIT = 1
+TASK_STATUS_START = 2
+TASK_STATUS_FINISH = 3
+
+TASK_STATUS_DICT = {
+    TASK_STATUS_INIT: "初始化",
+    TASK_STATUS_START: "已启动",
+    TASK_STATUS_FINISH: "已完成"
+}

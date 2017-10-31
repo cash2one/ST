@@ -30,6 +30,19 @@
                                         <form class="form-horizontal">
                                             <div class="form-group">
                                                 <label for="service_name" class="col-sm-3 control-label"><i
+                                                        class="text-danger">*</i>服务类型：</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" id="service_type">
+                                                        <option value="">--请选择--</option>
+                                                        {% for key in service_types %}
+                                                            <option value="{{ key }}" {{ "selected" if data.service_type==key else
+                                                    "" }}>{{ service_types[key] }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="service_name" class="col-sm-3 control-label"><i
                                                         class="text-danger">*</i>服务名称：</label>
                                                 <div class="col-sm-9">
                                                     <input type="text" class="form-control" id="service_name"
@@ -87,19 +100,6 @@
                                                 <div class="col-sm-9">
                                                     <input type="text" class="form-control" id="remark"
                                                            value="{{ data.remark }}"/>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="service_name" class="col-sm-3 control-label"><i
-                                                        class="text-danger">*</i>任务模板：</label>
-                                                <div class="col-sm-9">
-                                                    <select class="form-control" id="task_tpl">
-                                                        <option value="">--请选择--</option>
-                                                        {% for key in task_tpls %}
-                                                            <option value="{{ key }}" {{ "selected" if data.task_template_code==key else
-                                                    "" }}>{{ task_tpls[key] }}</option>
-                                                        {% endfor %}
-                                                    </select>
                                                 </div>
                                             </div>
                                         </form>

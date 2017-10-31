@@ -29,6 +29,11 @@ class ActorService(ProModel, ModelBase):
     async def get_member_services(cls, session, actor_id):
         return session.query(cls).filter(cls.actor_id == actor_id).all()
 
+    @classmethod
+    async def get_service_by_type(cls, session, actor_id, service_type):
+        return session.query(cls).join(Service, isouter=True).filter(cls.actor_id == actor_id,
+                                                                     Service.service_type == service_type).one_or_none()
+
 
 class Service(ProModel, ModelBase):
     """
@@ -48,7 +53,7 @@ class Service(ProModel, ModelBase):
     order_no = Column(Integer, default=0)  # 排序号,越大越往前排
     category_id = Column(Integer, ForeignKey("category.id"))  # 所属分类
     delete_flag = Column(Boolean, default=False)  # 删除标志
-    task_template_code = Column(String, nullable=false)  # 服务对应任务模板
+    service_type = Column(Integer, nullable=false)  # 服务类型
 
     packages = relationship("Package", order_by="Package.order_no.desc()",
                             back_populates="service",
