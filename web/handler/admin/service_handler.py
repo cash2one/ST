@@ -5,8 +5,7 @@ from yhklibs.db.postgresql import yhk_session
 from web.auth import admin_login_required
 from web.models.service import Service, Package
 from web.models.category import Category
-from yhklibs import yhk_app
-
+from web.core import constants
 
 @st_admin_blueprint.route("/service", methods=["GET"])
 @admin_login_required
@@ -39,7 +38,7 @@ async def get_service_list(request):
 async def view(request, service_id):
     with yhk_session() as session:
         service = await Service.get(session, service_id)
-        service.service_type = yhk_app.config["SERVICE_TYPE_DICT"].get(service.service_type)
+        service.service_type = constants.SERVICE_TYPE_DICT.get(service.service_type)
         return html(await render_template('/admin/service_view.html', request=request, data=service))
 
 
@@ -60,7 +59,7 @@ async def delete_service(request, service_id):
 async def service_edit(request):
     if request.method == "GET":
         service_id = request.args.get("service_id")
-        service_types = yhk_app.config["SERVICE_TYPE_DICT"]
+        service_types = constants.SERVICE_TYPE_DICT
         with yhk_session() as session:
             categories = await Category.get_all(session)
 

@@ -82,7 +82,7 @@ $(function () {
             return;
         }
         if (task_type == "10000") {
-            var keywords_10000 = $("#keywords_10000").html();
+            var keywords_10000 = $("#keywords_10000").val();
             var task_count_10000 = $("task_count_10000").val();
             if (keywords_10000 == "") {
                 layer.msg("请填写关键词！");
