@@ -43,12 +43,11 @@ function buy_now() {
     }
     layer.close(layer0);
     $.post('/member/shop/service/' + service_id + '/' + package_id + '/buynow', {}, function (data) {
-        var package = data.data;
-        $("#package_pay_service_name").html(package.service_name);
-        $("#package_pay_package_name").html(package.package_name);
-        $("#package_pay_price").html('￥' + package.package_price + '/' + package.times + '次');
-
         if (data.code == 200) {
+            var package = data.data;
+            $("#package_pay_service_name").html(package.service_name);
+            $("#package_pay_package_name").html(package.package_name);
+            $("#package_pay_price").html('￥' + package.package_price + '/' + package.times + '次');
             layer.open({
                 title: '套餐支付',
                 type: 1,
@@ -57,11 +56,7 @@ function buy_now() {
                 anim: 2,
                 shadeClose: false, //开启遮罩关闭
                 content: $('#package_pay').html(),
-                area: ['800px', '600px'],
-                end: function () {
-                    // package_id = "";
-                    // total_price = 0;
-                }
+                area: ['800px', '600px']
             });
         } else if (data.code == 2001) {
             layer.alert('服务购买成功，前往我的服务查看！');

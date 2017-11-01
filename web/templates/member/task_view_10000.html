@@ -33,7 +33,7 @@
                                             <p><label>任务ID：</label> {{ task.id }}</p>
                                             <p><label>服务名称：</label>{{ task.service.service_name }}</p>
                                             <p><label>任务状态：</label> {{ task.task_status_text }}</p>
-                                            <p><label>执行结果：</label> {{ task.task_result.get("message") }}</p>
+                                            <p><label>执行结果：</label> {{ task.task_result.get("message") or '' }}</p>
                                             <p>
                                                 <label>创建时间：</label> {{ task.created_time.strftime('%Y-%m-%d %H:%M:%S') }}
                                             </p>

@@ -100,7 +100,7 @@ async def task_save(request, task_type):
                                         actor_service.package_time,
                                         "创建查询任务扣减", task.id)
             # 启动任务
-            out_task_id, result, code = 83317, {}, 1  # baidu_keyword_rank_pc.create_task(keywords, task_count)
+            out_task_id, result, code = baidu_keyword_rank_pc.create_task(keywords, task_count)
             if code == 0:
                 task.task_status = constants.TASK_STATUS_START
             else:
