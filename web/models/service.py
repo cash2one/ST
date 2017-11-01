@@ -2,6 +2,9 @@ import datetime
 from sqlalchemy import *
 from yhklibs.db.postgresql import ModelBase, ProModel
 from sqlalchemy.orm import relationship
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ActorService(ProModel, ModelBase):
@@ -33,6 +36,18 @@ class ActorService(ProModel, ModelBase):
     async def get_service_by_type(cls, session, actor_id, service_type):
         return session.query(cls).join(Service, isouter=True).filter(cls.actor_id == actor_id,
                                                                      Service.service_type == service_type).one_or_none()
+
+    @classmethod
+    async def deduct_package_time(cls, session, actor_id, service_id, times):
+        actor_service = session.query(cls).filter(cls.actor_id == actor_id, cls.service_id == service_id).one_or_none()
+        if not actor_service:
+            logger.error("deduct package_time failed，Service not exists！")
+            return False
+        if actor_service.package_time < times:
+            logger.error("deduct package_time failed，times not enough！")
+            return False
+        actor_service.package_time = actor_service.package_time - times
+        session.commit()
 
 
 class Service(ProModel, ModelBase):

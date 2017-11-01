@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}任务结果{% endblock %}
+{% block contents %}
+    <body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>查询结果
+                        </h5>
+                        <div class="ibox-tools">
+                            <a class="st-backward">
+                                <i class="glyphicon glyphicon-arrow-left"></i>
+                            </a>
+                            <a class="st-refresh">
+                                <i class="glyphicon glyphicon-refresh"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        {% if not task %}
+                            任务信息不存在！
+                        {% else %}
+                            <input type="hidden" id="task_id" value="{{ task.id }}">
+                            <table id="task_result_10000"></table>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block foot %}
+    <script src="/static/js/member/task.js"></script>
+{% endblock %}

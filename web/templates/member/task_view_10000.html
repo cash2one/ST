@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}任务详情{% endblock %}
+{% block contents %}
+    <body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>任务详情
+                        </h5>
+                        <div class="ibox-tools">
+                            <a class="st-backward">
+                                <i class="glyphicon glyphicon-arrow-left"></i>
+                            </a>
+                            <a class="st-refresh">
+                                <i class="glyphicon glyphicon-refresh"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        {% if not task %}
+                            <h3>任务信息不存在</h3>
+                        {% else %}
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">任务信息</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <p><label>任务名称：</label>{{ task.task_name }}</p>
+                                            <p><label>任务ID：</label> {{ task.id }}</p>
+                                            <p><label>服务名称：</label>{{ task.service.service_name }}</p>
+                                            <p><label>任务状态：</label> {{ task.task_status_text }}</p>
+                                            <p><label>执行结果：</label> {{ task.task_result.get("message") }}</p>
+                                            <p>
+                                                <label>创建时间：</label> {{ task.created_time.strftime('%Y-%m-%d %H:%M:%S') }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">查询条件</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <p><label>关键词：</label> {{ condition.keywords }}</p>
+                                            <p><label>查询条数：</label> {{ condition.query_limit }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block foot %}
+{% endblock %}

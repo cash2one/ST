@@ -1,64 +1,65 @@
 {% extends "base.html" %}
 {% block title %}我的服务{% endblock %}
 {% block contents %}
-<body class="gray-bg">
-<div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>我的服务
-                    </h5>
-                    <div class="ibox-tools">
-                        <a href="/member/shop">去逛逛</a>&nbsp;&nbsp;
-                        <a class="st-refresh">
-                            <i class="glyphicon glyphicon-refresh"></i>
-                        </a>
+    <body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>我的服务
+                        </h5>
+                        <div class="ibox-tools">
+                            <a href="/member/shop">去逛逛</a>&nbsp;&nbsp;
+                            <a class="st-refresh">
+                                <i class="glyphicon glyphicon-refresh"></i>
+                            </a>
+                        </div>
                     </div>
-                </div>
-                <div class="ibox-content">
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th>序号</th>
-                                <th>服务名称</th>
-                                <th>最近购买时间</th>
-                                <th>套餐余次</th>
-                                <th>购买</th>
-                                <th>操作</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for item in datalist %}
-                            <tr>
-                                <td>{{loop.index}}</td>
-                                <td>{{item.service.service_name}}</td>
-                                <td>{{item.last_buy_time.strftime('%Y-%m-%d %H:%M:%S')}}</td>
-                                <td>{{item.package_time}}</td>
-                                <td>
-                                    {% if item.service.enable and item.service.delete_flag==False %}
-                                    <a href="/member/shop/service/{{item.service.id}}">再次购买</a>
-                                    {% else %}
-                                    服务不可用
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    {% if item.service.enable and item.service.delete_flag==False %}
-                                    <a href="/member/task/create/{{item.service.id}}">新建任务</a>&nbsp;&nbsp;&nbsp;&nbsp;
-                                    {% endif %}
-                                    <a href="/member/service/statistic/{{item.service.id}}">统计</a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
+                    <div class="ibox-content">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>服务名称</th>
+                                    <th>最近购买时间</th>
+                                    <th>套餐余次</th>
+                                    <th>购买</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for item in datalist %}
+                                    <tr>
+                                        <td>{{ loop.index }}</td>
+                                        <td>{{ item.service.service_name }}</td>
+                                        <td>{{ item.last_buy_time.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                                        <td>{{ item.package_time }}</td>
+                                        <td>
+                                            {% if item.service.enable and item.service.delete_flag==False %}
+                                                <a href="/member/shop/service/{{ item.service.id }}">再次购买</a>
+                                            {% else %}
+                                                服务不可用
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if item.service.enable and item.service.delete_flag==False %}
+                                                <a href="/member/task/create?service_id={{ item.service.id }}">新建任务</a>
+                                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                            {% endif %}
+                                            <a href="/member/service/statistic/{{ item.service.id }}">统计</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}
 {% block foot %}
 {% endblock %}

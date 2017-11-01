@@ -22,32 +22,47 @@ class Task(ProModel, ModelBase):
     created_time = Column(DateTime, default=datetime.datetime.now)  # 创建时间
     delete_flag = Column(Boolean, default=False)  # 删除标志
     out_task_id = Column(String)  # 商户任务id
+    query_times = Column(Integer, default=0)  # 向服务器查询结果的次数，不得超过20次
 
     service = relationship("Service")
 
     async def to_json(self, session):
         await self.check_task_status(session)
         result = {}
-        for key, value in self.__dict__.items():
-            if key.startswith('_'):
-                continue
-            if key == "created_time":
-                value = value.strftime('%Y-%m-%d %H:%M:%S')
-            if key == "task_status":
-                result["task_status_text"] = constants.TASK_STATUS_DICT[self.task_status]
-            result[key] = value
+        result["id"] = self.id
+        result["actor_id"] = self.actor_id
+        result["task_name"] = self.task_name
+        result["task_status"] = self.task_status
+        result["task_result"] = self.task_result
+        result["service_id"] = self.service_id
+        result["service_type"] = self.service_type
+        result["created_time"] = self.created_time.strftime('%Y-%m-%d %H:%M:%S')
+        result["delete_flag"] = self.delete_flag
+        result["out_task_id"] = self.out_task_id
+        result["query_times"] = self.query_times
         result["service_name"] = self.service.service_name
+        result["task_status_text"] = constants.TASK_STATUS_DICT[self.task_status]
         return result
 
     async def check_task_status(self, session):
-        if self.task_status == constants.TASK_STATUS_FINISH:
+        if self.task_status in [constants.TASK_STATUS_FINISH, constants.TASK_STATUS_FAIL]:
+            return
+        if self.query_times >= 20:
             return
         data, r, code = baidu_keyword_rank_pc.get_task_data(self.out_task_id)
         self.task_result = r
-        if code == '0':
+        self.query_times += 1
+        if code == 0:
             self.task_status = constants.TASK_STATUS_FINISH
-            session.commit()
+        elif self.query_times >= 20:
+            self.task_status = constants.TASK_STATUS_FAIL
+        session.commit()
+        if code == 0:
             await BaiduPcTop50Result.save_result(session, self.id, data)
+
+    @classmethod
+    async def get(cls, session, pk):
+        return session.query(cls).get(pk)
 
     @classmethod
     async def query(cls, session, actor_id=None, task_name=None, offset=None, limit=None):
@@ -90,6 +105,10 @@ class BaiduPcTop50Condition(ProModel, ModelBase):
     created_time = Column(DateTime, default=datetime.datetime.now)  # 创建时间
 
     @classmethod
+    async def get(cls, session, pk):
+        return session.query(cls).get(pk)
+
+    @classmethod
     async def create_condition(cls, session, task_id, keywords, query_limit):
         con = cls()
         con.id = task_id
@@ -117,6 +136,16 @@ class BaiduPcTop50Result(ProModel, ModelBase):
     top100 = Column(Integer)  # 此网站在百度排名前100名的关键词数量
     created_time = Column(DateTime, default=datetime.datetime.now)  # 创建时间
 
+    def to_json(self):
+        result = {}
+        for key, value in self.__dict__.items():
+            if key.startswith('_'):
+                continue
+            if key == 'created_time':
+                value = value.strftime('%Y-%m-%d %H:%M:%S')
+            result[key] = value
+        return result
+
     @classmethod
     async def save_result(cls, session, task_id, data):
         count = session.query(cls).filter(cls.task_id == task_id).count()
@@ -136,3 +165,15 @@ class BaiduPcTop50Result(ProModel, ModelBase):
             result.created_time = now
             session.add(result)
         session.commit()
+
+    @classmethod
+    async def query(cls, session, task_id=None, offset=None, limit=None):
+        q = session.query(cls).filter(cls.task_id == task_id)
+        total = q.count()
+        if total:
+            q = q.order_by(cls.rank)
+            if offset:
+                q = q.offset(offset)
+            if limit:
+                q = q.limit(limit)
+        return total, q.all()

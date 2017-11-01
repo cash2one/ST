@@ -30,10 +30,11 @@
                                 <label for="task_type" class="col-sm-2 control-label"><i
                                         class="text-danger">*</i>任务类型:</label>
                                 <div class="col-sm-10">
+                                    <input type="hidden" value="{{ service_id }}" id="service_id">
                                     <select class="form-control" id="task_type">
                                         <option value="">--请选择--</option>
                                         {% for s in services %}
-                                            <option value="{{ s.service.service_type }}">{{ s.service_name }}</option>
+                                            <option sid="{{ s.service_id }}" value="{{ s.service.service_type }}">{{ s.service_name }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -44,20 +45,23 @@
                                 <label for="keywords_10000" class="col-sm-2 control-label"><i
                                         class="text-danger">*</i>关键词:</label>
                                 <div class="col-sm-10">
-                                    <textarea class="form-control" id="keywords_10000" rows="10" placeholder="一行一个关键词，一个关键词计一次调用"></textarea>
+                                    <textarea class="form-control" id="keywords_10000" rows="10"
+                                              placeholder="一行一个关键词，一个关键词计一次调用"></textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="task_count_10000" class="col-sm-2 control-label">查询条数:</label>
                                 <div class="col-sm-10">
-                                    <input type="number" class="form-control" id="task_count_10000" placeholder="默认前50条">
+                                    <input type="number" class="form-control" id="task_count_10000"
+                                           placeholder="默认前50条，最多返回前100名">
                                 </div>
                             </div>
                         </form>
                         <form class="form-horizontal" action="#">
                             <div class="form-group">
                                 <div class="col-sm-offset-2 col-sm-10">
-                                    <button type="button" id="btn_task_create" class="btn btn-primary btn-w-m">提交</button>
+                                    <button type="button" id="btn_task_create" class="btn btn-primary btn-w-m">提交
+                                    </button>
                                 </div>
                             </div>
                         </form>

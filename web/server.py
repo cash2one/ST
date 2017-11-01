@@ -9,7 +9,6 @@ sys.path.insert(0, os.path.join(cur_dir, "../../"))
 from yhklibs import yhk_app
 from yhklibs.web.prosanic import YHKHttpProtocol
 from web.prosanic import prosanic
-from web.core.api import init_header
 
 cfg_path = os.path.join(cur_dir, "conf")
 
@@ -26,7 +25,6 @@ def start():
     logging.basicConfig(level=logging.DEBUG)
 
     yhk_app.start(cfg_path, env=args.environment)
-    init_header()
 
     prosanic.run(host=args.host, port=args.port, debug=args.debug, protocol=YHKHttpProtocol)
 
