@@ -15,7 +15,7 @@ class ServiceOrder(ProModel, ModelBase):
     actor_id = Column(Integer, ForeignKey("actor.id"))  # 用户id
     service_id = Column(Integer, ForeignKey("service.id"))  # 服务id
     package_id = Column(Integer, ForeignKey("package.id"))  # 套餐id
-    payment_price = Column(Float, nullable=false, default=0)  # 实际支付金额
+    payment_price = Column(Float, nullable=False, default=0)  # 实际支付金额
     payment_time = Column(DateTime)  # 支付时间
     payment_type = Column(Integer)  # 支付方式
     order_status = Column(Integer, default=1)  # 订单状态 1：已确认，2：已取消，3：已退货

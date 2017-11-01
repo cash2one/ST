@@ -11,7 +11,7 @@ class Category(ProModel, ModelBase):
     __tablename__ = "category"
 
     id = Column(Integer, Sequence("category_id_seq", start=100000), primary_key=True)  # category id
-    category_name = Column(String, nullable=false)  # 分类名称
+    category_name = Column(String, nullable=False)  # 分类名称
     enable = Column(Boolean, default=true)  # 是否可用
     created_time = Column(DateTime, default=datetime.datetime.now)  # 创建日期
 

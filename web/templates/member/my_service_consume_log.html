@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}任务管理{% endblock %}
+{% block contents %}
+    <body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>消费历史
+                        </h5>
+                        <div class="ibox-tools">
+                            <a class="st-backward">
+                                <i class="glyphicon glyphicon-arrow-left"></i>
+                            </a>
+                            <a class="st-refresh">
+                                <i class="glyphicon glyphicon-refresh"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <input type="hidden" value="{{ service_id }}" id="service_id"/>
+                        <table id="consumelist"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block foot %}
+    <script src="/static/js/member/my_service.js"></script>
+{% endblock %}

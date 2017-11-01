@@ -14,11 +14,11 @@ class Task(ProModel, ModelBase):
 
     id = Column(Integer, Sequence("task_id_seq", start=100000), primary_key=True)  # task id
     actor_id = Column(Integer, ForeignKey("actor.id"))  # 用户id
-    task_name = Column(String, nullable=false)  # 任务名称
-    task_status = Column(Integer, nullable=false, default=constants.TASK_STATUS_INIT)
-    task_result = Column(JSON, nullable=true)  # 执行结果
+    task_name = Column(String, nullable=False)  # 任务名称
+    task_status = Column(Integer, nullable=False, default=constants.TASK_STATUS_INIT)
+    task_result = Column(JSON, nullable=True)  # 执行结果
     service_id = Column(Integer, ForeignKey("service.id"))  # 所属服务
-    service_type = Column(Integer, nullable=false)  # 服务类型，10000：BaiduPcTop50
+    service_type = Column(Integer, nullable=False)  # 服务类型，10000：BaiduPcTop50
     created_time = Column(DateTime, default=datetime.datetime.now)  # 创建时间
     delete_flag = Column(Boolean, default=False)  # 删除标志
     out_task_id = Column(String)  # 商户任务id
@@ -100,7 +100,7 @@ class BaiduPcTop50Condition(ProModel, ModelBase):
     """
     __tablename__ = "baidu_keyword_rank_pc_condition"
     id = Column(Integer, primary_key=True)  # task id
-    keywords = Column(String, nullable=false)  # 关键词
+    keywords = Column(String, nullable=False)  # 关键词
     query_limit = Column(Integer, default=50)  # 结果数，比如前50条
     created_time = Column(DateTime, default=datetime.datetime.now)  # 创建时间
 
@@ -127,7 +127,7 @@ class BaiduPcTop50Result(ProModel, ModelBase):
     __tablename__ = "baidu_keyword_rank_pc_result"
     id = Column(Integer, Sequence("baidu_keyword_rank_pc_result_id_seq", start=100000), primary_key=True)
     task_id = Column(Integer, ForeignKey("task.id"))
-    keyword = Column(String, nullable=false)  # 关键词
+    keyword = Column(String, nullable=False)  # 关键词
     rank = Column(Integer)  # 排名
     site_url = Column(String)  # 网址
     page_url = Column(String)  # 网页地址

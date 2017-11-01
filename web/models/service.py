@@ -16,9 +16,9 @@ class ActorService(ProModel, ModelBase):
     id = Column(Integer, Sequence("actor_service_id_seq", start=100000), primary_key=True)  # actor_service id
     actor_id = Column(Integer, ForeignKey("actor.id"))  # 用户id
     service_id = Column(Integer, ForeignKey("service.id"))  # 服务id
-    service_name = Column(String, nullable=false)  # 服务名称
-    last_buy_time = Column(DateTime, nullable=false, default=datetime.datetime.now)  # 最近购买时间
-    package_time = Column(Integer, nullable=false, default=0)  # 套餐余量
+    service_name = Column(String, nullable=False)  # 服务名称
+    last_buy_time = Column(DateTime, nullable=False, default=datetime.datetime.now)  # 最近购买时间
+    package_time = Column(Integer, nullable=False, default=0)  # 套餐余量
     created_time = Column(DateTime, default=datetime.datetime.now)  # 创建日期
 
     service = relationship("Service")  # 对应服务
@@ -57,18 +57,18 @@ class Service(ProModel, ModelBase):
     __tablename__ = "service"
 
     id = Column(Integer, Sequence("service_id_seq", start=100000), primary_key=True)  # service id
-    service_name = Column(String, nullable=false)  # 服务名称
-    sub_heading = Column(String, nullable=true)  # 副标题
-    service_picture = Column(String, nullable=true)  # 服务图片
-    price = Column(Float, nullable=false)  # 单价，如0.005/次
-    remark = Column(String, nullable=true)  # 备注
+    service_name = Column(String, nullable=False)  # 服务名称
+    sub_heading = Column(String, nullable=True)  # 副标题
+    service_picture = Column(String, nullable=True)  # 服务图片
+    price = Column(Float, nullable=False)  # 单价，如0.005/次
+    remark = Column(String, nullable=True)  # 备注
     created_time = Column(DateTime, default=datetime.datetime.now)  # 创建日期
     enable = Column(Boolean, default=true)  # 是否可用
-    instruction = Column(String, nullable=true)  # 服务说明，html
+    instruction = Column(String, nullable=True)  # 服务说明，html
     order_no = Column(Integer, default=0)  # 排序号,越大越往前排
     category_id = Column(Integer, ForeignKey("category.id"))  # 所属分类
     delete_flag = Column(Boolean, default=False)  # 删除标志
-    service_type = Column(Integer, nullable=false)  # 服务类型
+    service_type = Column(Integer, nullable=False)  # 服务类型
 
     packages = relationship("Package", order_by="Package.order_no.desc()",
                             back_populates="service",
@@ -122,10 +122,10 @@ class Package(ProModel, ModelBase):
     __tablename__ = "package"
 
     id = Column(Integer, Sequence("package_id_seq", start=100000), primary_key=True)  # package id
-    package_name = Column(String, nullable=false)  # 套餐名称，如首次使用套餐
-    package_price = Column(Float, nullable=false)  # 套餐价格
-    times = Column(Integer, nullable=false)  # 可使用次数
-    remark = Column(String, nullable=true)  # 备注
+    package_name = Column(String, nullable=False)  # 套餐名称，如首次使用套餐
+    package_price = Column(Float, nullable=False)  # 套餐价格
+    times = Column(Integer, nullable=False)  # 可使用次数
+    remark = Column(String, nullable=True)  # 备注
     created_time = Column(DateTime, default=datetime.datetime.now)  # 创建日期
     service_id = Column(Integer, ForeignKey('service.id'))
     can_buy_again = Column(Boolean, default=true)  # 是否可重复购买
@@ -167,10 +167,63 @@ class ServicePackageBuyingLog(ProModel, ModelBase):
     actor_id = Column(Integer, ForeignKey("actor.id"))  # 用户id
     service_id = Column(Integer, ForeignKey("service.id"))  # 服务id
     package_id = Column(Integer, ForeignKey("package.id"))  # 套餐id
-    payment_price = Column(Float, nullable=false)  # 实际支付金额
+    payment_price = Column(Float, nullable=False)  # 实际支付金额
     service_order_id = Column(Integer)  # 订单id
     created_time = Column(DateTime, default=datetime.datetime.now)  # 创建日期
 
     @classmethod
     async def check_can_buy_again(cls, session, actor_id, package_id):
         return session.query(cls).filter(cls.actor_id == actor_id, cls.package_id == package_id).one_or_none()
+
+
+class ServiceConsumeLog(ProModel, ModelBase):
+    """
+    服务套餐购买记录
+    """
+    __tablename__ = "service_consume_log"
+
+    id = Column(Integer, Sequence("service_consume_log_id_seq", start=100000),
+                primary_key=True)  # service_consume_log id
+    actor_id = Column(Integer, ForeignKey("actor.id"))  # 用户id
+    service_id = Column(Integer, ForeignKey("service.id"))  # 服务id
+    consume_times = Column(Integer, nullable=False)  # 消费次数
+    before_consume_times = Column(Integer, nullable=False)  # 消费前次数
+    after_consume_times = Column(Integer, nullable=False)  # 消费后次数
+    consume_reason = Column(String)  # 消费原因
+    task_id = Column(Integer, ForeignKey("task.id"))  # 任务id
+    created_time = Column(DateTime, default=datetime.datetime.now)  # 创建日期
+
+    def to_json(self):
+        result = {}
+        for key, value in self.__dict__.items():
+            if key.startswith('_'):
+                continue
+            if key == "created_time":
+                value = value.strftime('%Y-%m-%d %H:%M:%S')
+            result[key] = value
+        return result
+
+    @classmethod
+    async def log(cls, session, actor_id, service_id, times, before_times, after_times, reason, task_id):
+        log = cls()
+        log.actor_id = actor_id
+        log.service_id = service_id
+        log.consume_times = times
+        log.before_consume_times = before_times
+        log.after_consume_times = after_times
+        log.consume_reason = reason
+        log.task_id = task_id
+        session.add(log)
+        session.commit()
+
+    @classmethod
+    async def query(cls, session, actor_id, service_id, offset, limit):
+        q = session.query(cls).filter(cls.actor_id == actor_id, cls.service_id == service_id)
+        total = q.count()
+        if total:
+            q = q.order_by(desc(cls.created_time))
+            if offset:
+                q = q.offset(offset)
+            if limit:
+                q = q.limit(limit)
+        return total, q.all()

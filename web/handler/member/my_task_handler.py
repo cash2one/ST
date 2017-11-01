@@ -2,7 +2,7 @@ from sanic.response import html, json
 from yhklibs.web.prosanic.template import render_template
 from web.handler.base import st_member_blueprint
 from yhklibs.db.postgresql import yhk_session
-from web.models.service import ActorService
+from web.models.service import ActorService, ServiceConsumeLog
 from web.models.task import Task, BaiduPcTop50Condition, BaiduPcTop50Result
 from web.auth import login_required
 from web.core import constants
@@ -89,19 +89,28 @@ async def task_save(request, task_type):
             if actor_service.package_time < times:
                 return json({"code": 500, "message": "抱歉，服务调用次数不足，请先购买！"})
             # 首先扣除服务次数
+            old_times = actor_service.package_time
             actor_service.package_time = actor_service.package_time - times
             session.commit()
             # 创建任务
             task = await Task.create_task(session, actor_id, task_name, actor_service.service_id, task_type)
             await BaiduPcTop50Condition.create_condition(session, task.id, keywords, task_count)
+            # 记录使用记录
+            await ServiceConsumeLog.log(session, actor_id, actor_service.service_id, -times, old_times,
+                                        actor_service.package_time,
+                                        "创建查询任务扣减", task.id)
             # 启动任务
-            out_task_id, result, code = 83317, {}, 0  # baidu_keyword_rank_pc.create_task(keywords, task_count)
+            out_task_id, result, code = 83317, {}, 1  # baidu_keyword_rank_pc.create_task(keywords, task_count)
             if code == 0:
                 task.task_status = constants.TASK_STATUS_START
             else:
                 task.task_status = constants.TASK_STATUS_FAIL
                 # 将服务次数加回来
+                old_times = actor_service.package_time
                 actor_service.package_time = actor_service.package_time + times
+                await ServiceConsumeLog.log(session, actor_id, actor_service.service_id, times,
+                                            old_times, actor_service.package_time,
+                                            "任务执行失败，返还调用次数", task.id)
             task.out_task_id = out_task_id
             task.task_result = result
             session.commit()
