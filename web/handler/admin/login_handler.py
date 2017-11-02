@@ -4,6 +4,7 @@ from web.handler.base import st_admin_blueprint
 import hashlib
 from yhklibs.db.postgresql import yhk_session
 from web.models.sysuser import SysUser
+from yhklibs.web.prosanic.response import redirect
 
 
 @st_admin_blueprint.route("/login", methods=["GET", "POST"])
@@ -29,3 +30,9 @@ async def login(request):
 
         request["session"]["st_admin_token"] = user.to_json()
         return json({"code": 200, "message": "登录成功！"})
+
+
+@st_admin_blueprint.route("/logout", methods=["GET"])
+async def logout(request):
+    request["session"]["st_admin_token"] = None
+    return redirect("/member/login")

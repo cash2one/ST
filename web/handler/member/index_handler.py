@@ -8,3 +8,9 @@ from web.auth import login_required
 @login_required
 async def index(request):
     return html(await render_template('/member/index.html', request=request))
+
+
+@st_member_blueprint.route("/workbench", methods=["GET"])
+@login_required
+async def workbench(request):
+    return html(await render_template('/member/workbench.html', request=request))

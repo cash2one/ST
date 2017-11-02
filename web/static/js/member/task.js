@@ -204,6 +204,22 @@ $(function () {
                 }],
         });
     }
+    //结果中搜索关键词
+    $("#btn_result_search").click(function () {
+        var result_keyword = $("#result_keyword").val();
+        var limit = $('#task_result_10000').bootstrapTable('getOptions').pageSize;
+        $('#task_result_10000').bootstrapTable("refresh", {query: {keyword: result_keyword, offset: 0, limit: limit}});
+    });
+
+    $("#btn_export_excel").click(function () {
+        var task_id = $("#task_id").val();
+        var result_keyword = $("#result_keyword").val();
+        if (task_id == "") {
+            layer.msg("缺少参数：任务id");
+            return;
+        }
+        window.location.href = "/member/task/10000/" + task_id + "/export_excel?keyword=" + result_keyword;
+    });
 });
 
 function delete_task(task_id) {

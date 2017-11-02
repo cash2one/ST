@@ -167,8 +167,10 @@ class BaiduPcTop50Result(ProModel, ModelBase):
         session.commit()
 
     @classmethod
-    async def query(cls, session, task_id=None, offset=None, limit=None):
+    async def query(cls, session, task_id=None, keyword=None, offset=None, limit=None):
         q = session.query(cls).filter(cls.task_id == task_id)
+        if keyword:
+            q = q.filter(cls.keyword.like(f'%{keyword}%'))
         total = q.count()
         if total:
             q = q.order_by(cls.rank)

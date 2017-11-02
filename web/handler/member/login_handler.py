@@ -6,6 +6,7 @@ from yhklibs.db.postgresql import yhk_session
 from web.models.actor import Actor
 from web.core import tools
 from sanic import response
+from yhklibs.web.prosanic.response import redirect
 
 
 @st_member_blueprint.route("/login", methods=["GET", "POST"])
@@ -38,7 +39,7 @@ async def login(request):
 
 
 @st_member_blueprint.route("/valid_code", methods=["GET"])
-async def index(request):
+async def valid_code(request):
     text, bytes = tools.generate_valid_code_image()
     request["session"]["valid_code"] = text
 
@@ -46,3 +47,9 @@ async def index(request):
         response.write(bytes)
 
     return response.stream(streaming_fn, content_type='image/png')
+
+
+@st_member_blueprint.route("/logout", methods=["GET"])
+async def logout(request):
+    request["session"]["st_token"] = None
+    return redirect("/member/login")

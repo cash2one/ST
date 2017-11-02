@@ -7,6 +7,10 @@ from web.models.task import Task, BaiduPcTop50Condition, BaiduPcTop50Result
 from web.auth import login_required
 from web.core import constants
 from web.core.api import baidu_keyword_rank_pc
+import xlwt
+import io
+from sanic.response import HTTPResponse
+import time
 
 
 @st_member_blueprint.route("/task", methods=["GET"])
@@ -199,6 +203,47 @@ async def task_result_list(request, task_type, task_id):
         if not task or (task.actor_id != actor_id):
             return json({"rows": [], "total": 0})
         if task_type == constants.SERVICE_TYPE_BAIDU_PC_TOP50:
-            total, rows = await BaiduPcTop50Result.query(session, task_id, offset, limit)
+            keyword = request.args.get("keyword")
+            total, rows = await BaiduPcTop50Result.query(session, task_id, keyword, offset, limit)
             rows = [item.to_json() for item in rows]
             return json({"rows": rows, "total": total})
+
+
+@st_member_blueprint.route("/task/<task_type:int>/<task_id:int>/export_excel", methods=["GET"])
+@login_required
+async def task_result_list(request, task_type, task_id):
+    actor = request["session"]["st_token"]
+    actor_id = actor["id"]
+    with yhk_session() as session:
+        task = await Task.get(session, task_id)
+        if not task or (task.actor_id != actor_id):
+            return json({"rows": [], "total": 0})
+        if task_type == constants.SERVICE_TYPE_BAIDU_PC_TOP50:
+            keyword = request.args.get("keyword")
+            total, rows = await BaiduPcTop50Result.query(session, task_id, keyword)
+            # 生成excel
+            workbook = xlwt.Workbook(encoding='utf-8')
+            worksheet = workbook.add_sheet(task.task_name)
+            worksheet.write(0, 0, label='关键词')
+            worksheet.write(0, 1, label='排名')
+            worksheet.write(0, 2, label='网址')
+            worksheet.write(0, 3, label='页面地址')
+            worksheet.write(0, 4, label='页面标题')
+            worksheet.write(0, 5, label='权重')
+            worksheet.write(0, 6, label='top100')
+            for index, item in enumerate(rows):
+                row = index + 1
+                worksheet.write(row, 0, label=item.keyword)
+                worksheet.write(row, 1, label=item.rank)
+                worksheet.write(row, 2, label=item.site_url)
+                worksheet.write(row, 3, label=item.page_url)
+                worksheet.write(row, 4, label=item.page_title)
+                worksheet.write(row, 5, label=item.weight)
+                worksheet.write(row, 6, label=item.top100)
+            stream = io.BytesIO()
+            workbook.save(stream)
+            bytes = stream.getvalue()
+
+            headers = {'Content-Disposition': 'attachment;filename=%s.xls' % time.strftime('%Y%m%d%H%M%S')}
+            response = HTTPResponse(body_bytes=bytes, headers=headers, content_type='application/vnd.ms-excel')
+            return response
