@@ -28,9 +28,9 @@ async def register(request):
     msg_id = request["session"].get("sms_code_id")
     if not msg_id:
         return json({"code": 500, "message": "验证码错误！"})
-    # valid_sms_code = Jpush().valid_sms_txt_codes(msg_id, sms_code)
-    # if not valid_sms_code:
-    #     return json({"code": 500, "message": "验证码不正确！"})
+    valid_sms_code = Jpush().valid_sms_txt_codes(msg_id, sms_code)
+    if not valid_sms_code:
+        return json({"code": 500, "message": "验证码不正确！"})
     with yhk_session() as session:
         actor = await Actor.get_by_phone(session, username)
         if actor:
@@ -59,7 +59,7 @@ async def sms_send(request):
         actor = await Actor.get_by_phone(session, phone)
         if actor:
             return json({"code": 500, "message": "手机号码已注册！"})
-    msg_id = "354838553987"  # Jpush().send_sms_txt_codes(phone)
+    msg_id = Jpush().send_sms_txt_codes(phone)  # "354838553987"
     if not msg_id:
         return json({"code": 500, "message": "获取验证码失败！"})
     request["session"]["sms_code_id"] = msg_id
