@@ -173,7 +173,7 @@ class BaiduPcTop50Result(ProModel, ModelBase):
             q = q.filter(cls.keyword.like(f'%{keyword}%'))
         total = q.count()
         if total:
-            q = q.order_by(cls.rank)
+            q = q.order_by(cls.keyword).order_by(cls.rank)
             if offset:
                 q = q.offset(offset)
             if limit:

@@ -1,100 +1,437 @@
-{% from "macros/_headerhelpers.html" import header %}
-{% from "macros/_flashhelper.html" import flash_helper %}
-{% extends "base.html" %}
-{% block title %}首页{% endblock %}
-{% block contents %}
-{% block header %}
-{{ header('admin') }}
-{% endblock %}
-<div class="content form-group">
-    <div class="contentLeft">
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html class="ie6 settings-main_background" lang="zh"> <![endif]-->
+<!--[if IE 7 ]> <html class="ie7 settings-main_background" lang="zh"> <![endif]-->
+<!--[if IE 8 ]> <html class="ie8 settings-main_background" lang="zh"> <![endif]-->
+<!--[if IE 9 ]> <html class="ie9 settings-main_background" lang="zh"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html class="settings-main_background" lang="zh"><!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <title>暴雪</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="暴雪">
+    <meta name="viewport"
+          content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <link rel="shortcut icon" href="//asset.ibanquan.com/image/57acb51702282e3f00000003/s.ico?v=0" type="image/x-icon">
+    <link rel="icon" href="Liquid error: 找不到文件favicon.ico" type="image/x-icon">
+    <link href='//asset.ibanquan.com/common/css/base-160225.min.css?v=143' media='screen' rel='stylesheet'
+          type='text/css'/>
+    <link href='//asset.ibanquan.com/middle/44386/c/458/5965c12106898776e500087a/iconfont.css?v=1509596161_1499840801'
+          media='screen' rel='stylesheet' type='text/css'/>
+    <link href='//asset.ibanquan.com/middle/44386/c/458/5965c12006898776e500086b/iconfont-1.css?v=1509596161_1499840800'
+          media='screen' rel='stylesheet' type='text/css'/>
+    <link href='//asset.ibanquan.com/middle/44386/c/458/5965c12006898776e5000865/aos.css?v=1509596161_1499840800'
+          media='screen' rel='stylesheet' type='text/css'/>
+    <link href='//asset.ibanquan.com/middle/44386/c/458/5965c12606898776e50008c3/main.css?v=1509596161_1499840806'
+          media='screen' rel='stylesheet' type='text/css'/>
+    <link href='//asset.ibanquan.com/middle/44386/c/458/5965c12606898776e50008c9/user.css?v=1509596161_1499840806'
+          media='screen' rel='stylesheet' type='text/css'/>
+    <script src='//asset.ibanquan.com/common/js/jquery-1.11.3.min.js?v=143' type='text/javascript'></script>
+    <script src='//asset.ibanquan.com/common/js/jssdk-0.0.18.min.js?v=143' type='text/javascript'></script>
+    <script src='//asset.ibanquan.com/common/js/lazyload.min.js?v=143' type='text/javascript'></script>
+    <script src='//asset.ibanquan.com/middle/44386/c/458/5965c12006898776e5000868/aos.js?v=1509596161_1499840800' type='text/javascript'></script>
 
-    </div>
-    <div class="contentRight widthMAX">
-        <div class="panel panel-primary" style="height: 50px">
-            <input style="margin-left: 10px" id="keyword" value="{% if keyword %}{{ keyword }}{% endif %}"
-                   placeholder="指定的关键词">
-            <input style="margin-left: 10px" id="num" value="{% if num %}{{ num }}{% endif %}"
-                   placeholder="检测行数(前n名)">
-            <button class="btn btn-info btn-uppercase btn-bigger" id="btn_query">查询</button>
+    <script>
+        window.productImage = '53f649ffe2931e0b91000007/noimage.png';
+        window.vendorImage = '578fc93402282e4f18000003/noimage.png';
+        window.iconImage = '57acb51702282e3f00000003/noimage.ico';
+        window.shareImage = '57acb53a02282e3f00000007/noimage.png';
+        window.assetPath = '//asset.ibanquan.com/image/';
+        window.postImage = '581a3b0402282e2bcc000003/s.png';
+        window.captchaPath = '//captcha.ibanquan.com';
+        window.ajaxToken = '9dd5934c294149a8aaba5a3540d7f709';
+    </script>
+    <script src=//asset.ibanquan.com/common/js/free.min.js type='text/javascript'></script>
+    <script>(function () {
+        var yt = document.createElement('script');
+        yt.src = '//asset.ibanquan.com/common/js/tracker-0.0.2.min.js?v=142';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(yt, s);
+    })();</script>
+</head>
+<body>
+
+<div class="head container settings-top_background">
+    <div class="head-t">
+        <div class="head-btn settings-top_color">
+            <i class="iconfont icon-hanbao" id="nav_mobile"></i>
         </div>
-        <div class="panel panel-primary">
-            <div class="panel-heading">查询结果</div>
-            <div>
-                <table id="tablelist"></table>
-            </div>
+        <div class="head-tl">
+            <a href="/">
+                <img src="//asset.ibanquan.com/middle/44386/c/458/5965c12606898776e50008c0/logo?v=1499840806" alt="暴雪">
+            </a>
+        </div>
+        <div class="head-tr">
+            <ul id="top-nav-link" class="nav-link dropdown-list clearfix">
+
+                <li class='settings-navLink_hover_background dropdown-list-item'>
+                    <a class="txt-overflow settings-navLink_color settings-nav_border dropdown-link settings-nav_text_color "
+                       id="navlink_1182336" href="/">首页</a>
+                </li>
+
+                <li class='settings-navLink_hover_background dropdown-list-item'>
+                    <a class="txt-overflow settings-navLink_color settings-nav_border dropdown-link settings-nav_text_color "
+                       id="navlink_1182337" href="/products">所有产品</a>
+                </li>
+
+                <li class='settings-navLink_hover_background dropdown-list-item'>
+                    <a class="txt-overflow settings-navLink_color settings-nav_border dropdown-link settings-nav_text_color "
+                       id="navlink_1182338" href="/blogs">博客</a>
+                </li>
+
+            </ul>
         </div>
     </div>
 </div>
-{% endblock %}
-{% block footer %}
-{{ flash_helper(request) }}
-<script type="text/javascript">
-    $(function () {
-        $('#tablelist').bootstrapTable({
-            height: 600,
-            columns: [{
-                field: 'rank',
-                title: '排名'
-            }, {
-                field: 'keyword',
-                title: '关键词'
-            }, {
-                field: 'site_url',
-                title: '网站地址'
-            }, {
-                field: 'page_url',
-                title: '页面地址',
-                formatter: function (value, row, index) {
-                    var div = "<div style='width:200px;overflow-x: auto;'>" + value + "</div>";
-                    return div;
-                }
-            }, {
-                field: 'page_title',
-                title: '页面标题'
-            }, {
-                field: 'top100',
-                title: 'top100'
-            }, {
-                field: 'site_weight',
-                title: '权重'
-            }]
-        });
-    });
 
-    $("#btn_query").click(function () {
-        var keyword = $("#keyword").val();
-        if (keyword == '') {
-            modal2("请输入关键词！");
-            return;
-        }
-        get_baidu_kwywordrank_pc(83317);
-        return;
-        var num = $("#num").val();
-        $.post("/baidu/keywordrank/pc/q", {"keyword": keyword, "num": num}, function (data) {
-            if (data.code == 200) {
-                var taskid = data.data.taskid;
-                get_baidu_kwywordrank_pc(taskid);
-            } else {
-                modal2(data.code + ":" + data.message);
-            }
-        }, "json");
-    });
+<div class="container wrapper-mobile_nav" id="mobile_menu">
+    <div class="mobile_nav">
+        <!-- -->
+        <div class="mobile_nav_menu settings-top_background">
+            <div class="mobile_nav_top settings-top_color settings-main_border">
+                <a href="/">
+                    <img src="//asset.ibanquan.com/middle/44386/c/458/5965c12606898776e50008c0/logo?v=1499840806"
+                         alt="暴雪">
+                </a>
+                <i class="iconfont icon-close" id="closeMbileNav"></i>
+            </div>
+            <!-- 一级菜单 -->
+            <ul id="side-nav-link" class="side-nav-link">
 
-    function get_baidu_kwywordrank_pc(taskid) {
-        $.post("/baidu/keywordrank/pc/r", {"taskid": taskid}, function (result) {
-            if (result.code == 200) {
-                if (result.data && result.data.length > 0) {
-                    $('#tablelist').bootstrapTable('load', result.data);
-                } else {
-                    setTimeout(function () {
-                        get_baidu_kwywordrank_pc(taskid);
-                    }, 2000);
+
+                <li class='side-nav-link-each'>
+                    <a class="settings-nav_text_color settings-sideLinkHover_color " id="navlink_1182336"
+                       href="/">首页</a>
+                </li>
+
+                <li class='side-nav-link-each'>
+                    <a class="settings-nav_text_color settings-sideLinkHover_color " id="navlink_1182337"
+                       href="/products">所有产品</a>
+                </li>
+
+                <li class='side-nav-link-each'>
+                    <a class="settings-nav_text_color settings-sideLinkHover_color " id="navlink_1182338" href="/blogs">博客</a>
+                </li>
+
+
+                <!---->
+            </ul>
+        </div>
+        <div class="mobile_nav_bg" id="mobile_bg"></div>
+        <!-- -->
+    </div>
+</div>
+
+
+<div class="index container settings-main_background_color">
+    <div class="index-top">
+
+        <div class="slide-cnt" id="slides">
+
+            <a class="slide-link" href="/posts">
+                <img width="100%"
+                     src="//asset.ibanquan.com/middle/44386/c/458/5965c12306898776e500089f/index_slide_1?v=1499840803"
+                     alt="slide1"/>
+                <div class="slide-text">
+                    <h1></h1>
+                    <p></p>
+                    <!-- <button onclick=""  class="slide_button"></button> -->
+                </div>
+            </a>
+
+
+            <a href="javascript:void(0);" id="slides_prev" class="slidesjs-previous slidesjs-navigation">
+                <span class="main-ico main-ico-sildeLeft"></span>
+            </a>
+            <a href="javascript:void(0);" id="slides_next" class="slidesjs-next slidesjs-navigation">
+                <span class="main-ico main-ico-sildeRight"></span>
+            </a>
+
+        </div>
+
+        <div class="index-new-features">
+            <div id="features">
+                <h1 class="settings-index_features_title_color" data-aos='fade-up'>「Moment」为什么好用</h1>
+                <h4 class="settings-index_features_detail_color" data-aos='fade-up'>our key features</h4>
+                <ul>
+                    <li data-aos='fade-up'>
+                        <a href="/posts"></a>
+                        <div class="icon icon1"><img
+                                src="//asset.ibanquan.com/middle/44386/c/458/5965c12206898776e5000889/index_features_1?v=1499840802">
+                        </div>
+                        <h5 class="title settings-feature_title_color">智能编辑</h5>
+                        <p class="settings-feature_content_color">一键智能编辑，只需轻轻一触就能为你调整出最完美的样张</p>
+                    </li>
+                    <li data-aos='fade-up'>
+                        <a href="javascript:void(0);"></a>
+                        <div class="icon icon2"><img
+                                src="//asset.ibanquan.com/middle/44386/c/458/5965c12206898776e500088c/index_features_2?v=1499840802">
+                        </div>
+                        <h5 class="title settings-feature_title_color">多种滤镜</h5>
+                        <p class="settings-feature_content_color">「Moment」精心研制多种风格滤镜，让你的照片轻松散发各种风味</p>
+                    </li>
+                    <li data-aos='fade-up'>
+                        <a href="/posts"></a>
+                        <div class="icon icon3"><img
+                                src="//asset.ibanquan.com/middle/44386/c/458/5965c12206898776e500088f/index_features_3?v=1499840802">
+                        </div>
+                        <h5 class="title settings-feature_title_color">自动对焦</h5>
+                        <p class="settings-feature_content_color">自动识别画面主题，虚化背景，手机也可以拍出单反的感觉</p>
+                    </li>
+                    <li data-aos='fade-up'>
+                        <a href="javascript:void(0);"></a>
+                        <div class="icon icon4"><img
+                                src="//asset.ibanquan.com/middle/44386/c/458/5965c12206898776e5000892/index_features_4?v=1499840802">
+                        </div>
+                        <h5 class="title settings-feature_title_color">云端同步</h5>
+                        <p class="settings-feature_content_color">随时随地跨平台备份，即使设备遗失也能找回照片</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="index-main-detail-1" data-aos='fade-up'>
+            <div class='index-main-detail-half'>
+                <div class="index-main-detail-text index-main-detail-left">
+                    <h3>powerful functions</h3>
+                    <h1>全面的功能覆盖</h1>
+                    <p>从拍摄模式到照片社区，「Moment」完美照顾到一张照片产出到发表的方方面面。除去强大的拍摄、编辑、美化功能，您还可以在摄影师社区里结识志同道合的朋友，分享拍摄的乐趣：）</p>
+                    <a href="javascript:void(0);">查看更多></a>
+                </div>
+            </div>
+            <div><a href="/posts"><img
+                    src="//asset.ibanquan.com/middle/44386/c/458/5965c12306898776e5000898/index_main_detail_1_img?v=1499840803"
+                    alt=""></a></div>
+        </div>
+
+        <div class="index-main-detail-2" data-aos='fade-up'>
+            <div><a href="/posts"><img
+                    src="//asset.ibanquan.com/middle/44386/c/458/5965c12306898776e500089b/index_main_detail_2_img?v=1499840803"
+                    class="index-main-detail-right" alt=""></a></div>
+            <div class='index-main-detail-half'>
+                <div class="index-main-detail-text index-main-detail-middle">
+                    <h3>minimalist style interface</h3>
+                    <h1>简洁的操作界面</h1>
+                    <p>「Moment」采用极简化的操作界面设计，却不失直观。你可以轻易的感受到画面在每一个刻度变化下的表现，给追求最精致的你。</p>
+                    <a href="">查看更多></a>
+                </div>
+            </div>
+        </div>
+        <div class="index-main-detail-2-mobi" data-aos='fade-up'>
+            <div class='index-main-detail-half'>
+                <div class="index-main-detail-text">
+                    <h3>minimalist style interface</h3>
+                    <h1>简洁的操作界面</h1>
+                    <p>「Moment」采用极简化的操作界面设计，却不失直观。你可以轻易的感受到画面在每一个刻度变化下的表现，给追求最精致的你。</p>
+                    <a href="">查看更多></a>
+                </div>
+            </div>
+            <div><a href="/posts"><img
+                    src="//asset.ibanquan.com/middle/44386/c/458/5965c12306898776e500089b/index_main_detail_2_img?v=1499840803"
+                    alt=""></a></div>
+        </div>
+        <div class="index-main-detail-3" data-aos='fade-up'>
+            <div class='index-main-detail-half'>
+                <div class="index-main-detail-text index-main-detail-left">
+                    <h3>what users say</h3>
+                    <h1>他们这么说</h1>
+                    <p>使用「Moment」的人群，从专业摄影师到普通的学生，欣赏他们的拍摄作品，看看他们怎么评价「Moment」带给他们的变化吧！</p>
+                    <a href="/posts">查看更多></a>
+                </div>
+            </div>
+
+            <div>
+                <div class="subs">
+
+                    <div class="sub_slide1">
+                        <div class="sub_slide11-inner settings-block_background">
+                            <div class="sub_slide1-cnt sub_slides">
+
+                                <a class="sub_slide1-link settings-index_sub_slide1_1_background" href="">
+                                    <img class="lazyload"
+                                         src="//asset.ibanquan.com/middle/44386/c/458/5965c12406898776e50008a9/index_sub_slide1_1?v=1499840804"
+                                         alt="sub_slide1_1"/>
+                                </a>
+
+
+                                <a class="sub_slide1-link settings-index_sub_slide1_2_background" href="">
+                                    <img class="lazyload"
+                                         src="//asset.ibanquan.com/middle/44386/c/458/5965c12406898776e50008ad/index_sub_slide1_2?v=1499840804"
+                                         alt="sub_slide1_2"/>
+                                </a>
+
+
+                                <a class="sub_slide1-link settings-index_sub_slide1_3_background" href="">
+                                    <img class="lazyload"
+                                         src="//asset.ibanquan.com/middle/44386/c/458/5965c12506898776e50008b0/index_sub_slide1_3?v=1499840805"
+                                         alt="sub_slide1_3"/>
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="sub_slide2">
+                        <div class="sub_slide21-inner settings-block_background">
+                            <div class="sub_slide2-cnt sub_slides">
+
+                                <a class="sub_slide2-link settings-index_sub_slide2_1_background" href="">
+                                    <img class="lazyload"
+                                         src="//asset.ibanquan.com/middle/44386/c/458/5965c12506898776e50008b4/index_sub_slide2_1?v=1499840805"
+                                         alt="sub_slide2_1"/>
+                                </a>
+
+
+                                <a class="sub_slide2-link settings-index_sub_slide2_2_background" href="">
+                                    <img class="lazyload"
+                                         src="//asset.ibanquan.com/middle/44386/c/458/5965c12506898776e50008b7/index_sub_slide2_2?v=1499840805"
+                                         alt="sub_slide2_2"/>
+                                </a>
+
+
+                                <a class="sub_slide2-link settings-index_sub_slide2_3_background" href="">
+                                    <img class="lazyload"
+                                         src="//asset.ibanquan.com/middle/44386/c/458/5965c12506898776e50008ba/index_sub_slide2_3?v=1499840805"
+                                         alt="sub_slide2_3"/>
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <script src='//asset.ibanquan.com/middle/44386/c/458/5965c12506898776e50008bd/jquery.slides.min.js?v=1509596161_1499840806'
+                type='text/javascript'></script>
+        <script>
+            $(function () {
+                $('#slides_prev').hide();
+                $('#slides_next').hide();
+
+                $('#slides').show();
+
+            });
+        </script>
+
+
+        <!-- 次要轮播大图脚本 -->
+
+
+        <script>
+            $(function () {
+
+                $(".sub_slides").slidesjs({
+                    pagination: false,
+                    play: {
+                        active: true,
+                        // [boolean] Generate the play and stop buttons.
+                        // You cannot use your own buttons. Sorry.
+                        effect: "slide",
+                        // [string] Can be either "slide" or "fade".
+                        interval: 5000,
+                        // [number] Time spent on each slide in milliseconds.
+                        auto: true,
+                        // [boolean] Start playing the slideshow on load.
+                        swap: false,
+                        // [boolean] show/hide stop and play buttons
+                        pauseOnHover: false,
+                        // [boolean] pause a playing slideshow on hover
+                        restartDelay: 2500
+                        // [number] restart delay on inactive slideshow
+                    },
+                    navigation: {
+                        active: false,
+                        effect: "slide"
+                    }
+                });
+
+            });
+        </script>
+
+
+        <!-- 小轮播大图脚本 -->
+
+
+        <script>
+            AOS.init({
+                offset: 200,
+                duration: 300,
+                easing: 'ease-in-sine',
+                delay: 100
+            });
+            $(document).scroll(function () {
+                if (document.documentElement.clientHeight + document.documentElement.scrollTop === document.documentElement.scrollHeight) {
+                    AOS.init({disable: true});
+                    $(document).off('scroll');
                 }
-            } else {
-                modal2(result.code + ":" + result.message);
-            }
-        }, "json");
-    }
-</script>
-{% endblock %}
+            })
+        </script>
+        <div id='tracecode'></div>
+        <div class="footer container settings-footer_background">
+            <div class="footer-content">
+                <div class="footer-t settings-main_border">
+                    <div class="footer-t-l">
+                        <div class="footer-qr-each settings-footer_text_color footer-logo-left">
+                            <img src="//asset.ibanquan.com/middle/44386/c/458/5965c12606898776e50008c0/logo?v=1499840806">
+                        </div>
+                        <ul class="footer-nav">
+
+                            <li>
+                                <dl>
+                                    <dt>
+                                        <a href="/" class="settings-footer_text_color">关于我们</a>
+                                    </dt>
+
+                                </dl>
+                            </li>
+
+                            <li>
+                                <dl>
+                                    <dt>
+                                        <a href="/" class="settings-footer_text_color">友情链接</a>
+                                    </dt>
+
+                                </dl>
+                            </li>
+
+                            <li>
+                                <dl>
+                                    <dt>
+                                        <a href="/" class="settings-footer_text_color">联系我们</a>
+                                    </dt>
+
+                                </dl>
+                            </li>
+
+                        </ul>
+                        <div class="footer-qr-each settings-footer_text_color footer-logo-right">
+                            微信公众号
+                            <img class="erwzma"
+                                 src="//asset.ibanquan.com/middle/44386/c/458/5965c12206898776e5000895/index_footer_qr?v=1499840802">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer-b settings-footer_text_color">
+                    <p>粤ICP备12043194号-6 © 2017 youhaosuda.com All rights reserved.</p>
+                </div>
+
+            </div>
+        </div>
+
+
+        <script src='//asset.ibanquan.com/middle/44386/c/458/5965c12606898776e50008c6/main.js?v=1509596161_1499840806'
+                type='text/javascript'></script>
+        <script src='//asset.ibanquan.com/middle/44386/c/458/5965c12606898776e50008cc/user.js?v=1509596161_1499840806'
+                type='text/javascript'></script>
+
+</body>
+</html>

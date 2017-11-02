@@ -7,7 +7,8 @@ from web.auth import login_required
 @st_member_blueprint.route("/index", methods=["GET"])
 @login_required
 async def index(request):
-    return html(await render_template('/member/index.html', request=request))
+    actor = request["session"]["st_token"]
+    return html(await render_template('/member/index.html', request=request, username=actor.get('username', '')))
 
 
 @st_member_blueprint.route("/workbench", methods=["GET"])
